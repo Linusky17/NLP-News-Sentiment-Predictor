@@ -46,7 +46,7 @@ def main():
 
         return df
     def userInputCheck(data):
-		converted = pd.DataFrame(data, columns=['headlines'])
+        converted = pd.DataFrame(data, columns=['headlines'])
         converted.replace("[^a-zA-Z]", " ", regex=True, inplace=True)
         converted[0] = converted[0].str.lower()
 
