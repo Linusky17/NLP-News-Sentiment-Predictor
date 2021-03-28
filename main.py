@@ -142,7 +142,7 @@ def main():
                 n_estimators=n_estimators, criterion='entropy')
             model.fit(x_train, y_train)
             predictions = model.predict(x_test)
-			
+
             userPred = model.predict(transInput)
 
 
@@ -156,9 +156,9 @@ def main():
             st.subheader("User Input Headline Prediction:")
             st.write(f'User Input Headline Prediction Result: {userPred[0]}')
             if userPred[0] == 1:
-        		st.write("The Dow Jones Industrial Average will stay the same or more up today. Buy!")
-			else:
-				st.write("The Dow Jones Industrial Average will decrease today. Sell!")
+                st.write("The Dow Jones Industrial Average will stay the same or more up today. Buy!")
+            else:
+                st.write("The Dow Jones Industrial Average will decrease today. Sell!")
             
 
 
