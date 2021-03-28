@@ -22,6 +22,24 @@ def main():
     if not predStarted:
         st.subheader("Use the sidebar to start the prediction")
 
+    hide_streamlit_style = """
+                <style>
+                #MainMenu {visibility: hidden;}
+                footer {visibility: hidden;}
+                footer:after {
+                    content:'Made by The Birds Team: David Xue, Qasim Ali'; 
+                    visibility: visible;
+                    display: block;
+                    position: relative;
+                    #background-color: red;
+                    padding: 5px;
+                    top: 2px;
+                }
+                </style>
+                """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+
     def loadCleanData():
         data = pd.read_csv('Combined_DJIA.csv')
         data['Top23'].fillna(data['Top23'].median, inplace=True)
@@ -163,3 +181,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
