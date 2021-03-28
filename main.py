@@ -15,7 +15,8 @@ nltk.download(['punkt', 'wordnet'])
 
 
 def main():
-    st.sidebar.title("News Sentiment Analysis on Stock Market Using Random Forest Classifier")
+    st.set_page_config(page_title='Stock Price Prediction Using News Headlines', page_icon = "icon.png")
+    st.sidebar.title("Stock Market DJIA Predictor News Headlines and Random Forest Classifier")
 
     def load_data():
         data = pd.read_csv(
@@ -46,9 +47,9 @@ def main():
 
         return df
     def userInputCheck(data):
-        converted = pd.DataFrame(data, columns=['headlines'])
+        data = data.lower()
+        converted = pd.DataFrame([data], columns=['headlines'])
         converted.replace("[^a-zA-Z]", " ", regex=True, inplace=True)
-        converted[0] = converted[0].str.lower()
 
         return converted
 
@@ -112,7 +113,6 @@ def main():
         st.write(df)
 
     classifier = "Random Forest Classifier"
-    st.write(f'{x_train[0]}')
 
     
 
@@ -125,19 +125,25 @@ def main():
         userInputLine = st.sidebar.text_area("Enter Your News Headline for Prediction:", "Despite 1,300 dead, majority of Palestinians still back Hamas rocket attacks")
         metrics = ["Confusion Matrix", "Classification_Report", "Accuracy_Score"]
         userInputLine = "b "+ userInputLine
+        userInputLine = userInputCheck(userInputLine)
+        #st.write(f'{userInputLine.head(1)}')
 
 
-        if st.sidebar.button("Classify", key="classify"):
+        if st.sidebar.button("Predict", key="Predict"):
 
-            st.subheader("Random Forest Classifier")
+            st.header("Results")
             x_train = vector.fit_transform(x_train)
             x_test = vector.transform(x_test)
+
+            transInput = vector.transform(userInputLine)
+
+
             model = RandomForestClassifier(
                 n_estimators=n_estimators, criterion='entropy')
             model.fit(x_train, y_train)
             predictions = model.predict(x_test)
-
-
+			
+            userPred = model.predict(transInput)
 
 
             matrix = confusion_matrix(y_test, predictions)
@@ -147,8 +153,13 @@ def main():
             # st.write("Classification_Report ", report)
             # st.write("Confusion Matrix ", matrix)
             plot_metrics(metrics)
+            st.subheader("User Input Headline Prediction:")
+            st.write(f'User Input Headline Prediction Result: {userPred[0]}')
+            if userPred[0] == 1:
+        		st.write("The Dow Jones Industrial Average will stay the same or more up today. Buy!")
+			else:
+				st.write("The Dow Jones Industrial Average will decrease today. Sell!")
             
-            st.write(f'{predictions[0]}')
 
 
 if __name__ == '__main__':
