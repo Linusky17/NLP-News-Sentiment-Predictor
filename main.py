@@ -117,9 +117,9 @@ def main():
 
         #metrics = st.sidebar.multiselect(
         #    "what metrics to plot?", ("Confusion Matrix", "Classification_Report", "Accuracy_Score"))
-		
-		
-		metrics = ["Confusion Matrix", "Classification_Report", "Accuracy_Score"]
+
+
+        metrics = ["Confusion Matrix", "Classification_Report", "Accuracy_Score"]
 
 
 
@@ -147,7 +147,7 @@ def main():
 
         metrics = st.sidebar.multiselect(
             "what metrics to plot?", ("Confusion Matrix", "Classification_Report", "Accuracy_Score"))
-		metrics = ["Confusion Matrix", "Classification_Report", "Accuracy_Score"]
+        metrics = ["Confusion Matrix", "Classification_Report", "Accuracy_Score"]
         if st.sidebar.button("Classify", key="classify"):
 
             st.subheader("Logistic Regression")
