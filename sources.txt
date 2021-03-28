@@ -1,0 +1,3 @@
+1. Kaggle Dataset used to train the Random Forest Model: https://www.kaggle.com/aaron7sun/stocknews?rvi=1
+2. Tutorial on Streamlit and building Stock Market Prediction: https://laptrinhx.com/build-a-ml-web-app-for-stock-market-prediction-from-daily-news-with-streamlit-and-python-3781765656/
+*Note: This hackathon is a great learning process for my team. Our goal is not to win the competition but rather learn from the process.

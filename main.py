@@ -20,7 +20,7 @@ def main():
     st.title("Predicting Dow Jones Industrial Average Based on Headlines")
     predStarted = False
     if not predStarted:
-        st.subheader("Use the sidebar to start the prediction")
+        st.write("Use the sidebar to start the prediction")
 
     hide_streamlit_style = """
                 <style>
@@ -100,10 +100,10 @@ def main():
         predictions = model.predict(x_test)
         report = classification_report(y_test, predictions)
         st.write(report)
-        st.subheader('Accuracy Score')
+        st.subheader('Model Accuracy Score')
         predictions = model.predict(x_test)
         score = accuracy_score(y_test, predictions)
-        st.write("Accuracy Score: ", score.round(3))
+        st.write("Model Accuracy Score from Test Set: ", score.round(3))
 
     def PipelineVectorize():
         vectPipeline = Pipeline([
@@ -129,7 +129,7 @@ def main():
     if classifier == "Random Forest Classifier":
         st.sidebar.subheader("Random Forest Hyperparameters")
         n_estimators = st.sidebar.number_input(
-            "n_estimators", 50, 300, step=50, key='n_estimators')
+            "# of estimators", 50, 300, step=50, key='n_estimators')
         trainRes = st.sidebar.checkbox("show model training report", True)
 
         st.sidebar.subheader("Prediction")	
@@ -156,16 +156,13 @@ def main():
             transInput = vector.transform(fixedInput)
 
 
-            model = RandomForestClassifier(n_estimators=n_estimators, criterion='entropy', random_state=42)
+            model = RandomForestClassifier(n_estimators=n_estimators, criterion='entropy')
             model.fit(x_train, y_train)
             predictions = model.predict(x_test)
 
             userPred = model.predict(transInput)
 
             if trainRes:
-                matrix = confusion_matrix(y_test, predictions)
-                score = accuracy_score(y_test, predictions)
-                report = classification_report(y_test, predictions)
                 buildTrainReport()
                 st.markdown('---')
             st.header("Headline Input Prediction Result:")
@@ -173,10 +170,12 @@ def main():
             st.write(userInputLine)
             st.write(f'User Input Headline Prediction Result: {userPred[0]}')
             if userPred[0] == 1:
-                st.write("The Dow Jones Industrial Average will stay the same or more up today. Buy!")
+                st.markdown("**The Dow Jones Industrial Average will stay the same or more up due to this news headline. Buy!**")
             else:
-                st.write("The Dow Jones Industrial Average will decrease today. Sell!")
-            
+                st.markdown("**The Dow Jones Industrial Average will decrease due to this news headline. Sell!**")
+
+            st.markdown("*Note: The model gets retrained every time the predict button is pressed. The results may differ slightly when running multiple times*")
+
 
 
 if __name__ == '__main__':
