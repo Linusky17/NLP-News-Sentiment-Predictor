@@ -15,13 +15,14 @@ from sklearn.metrics import accuracy_score
 import pandas as pd
 from pandas_datareader import data
 aapl = data.DataReader("AAPL",
-                        start='2015-1-1',
-                        end='2019-12-31',
+                        start='2021-3-26',
+                        end='2021-3-27',
                         data_source='yahoo')
 
-st.title('Streamlit Example')
-
-st.write("""
-# Different classifier and datasets
-Compare classifiers:
-""")
+print(aapl.head(10))
+# st.title('Streamlit Example')
+#
+# st.write("""
+# # Different classifier and datasets
+# Compare classifiers:
+# """)
