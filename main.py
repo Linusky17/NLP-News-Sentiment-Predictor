@@ -5,10 +5,9 @@ from datetime import datetime, timedelta
 
 st.title("Stock Price Predictor")
 
-stock_name = "AAPL"
 stock_name = st.text_input("Enter the stock name: \n")
-option = st.slider("How many days of data would you like to see?", 1,60,30)
-						
+option = st.slider("How many days of data would you like to see?", 1, 60, 30)
+
 end = datetime.today().strftime('%Y-%m-%d')
 start = (datetime.today() - timedelta(option)).strftime('%Y-%m-%d')
 
@@ -19,6 +18,7 @@ def load_data(stock, start_date, end_date):
     
     df = data.DataReader(name=stock, start=start_date, end=end_date, data_source='yahoo')
     return df
+
 
 data_load_state = st.text("Loading data...")
 
