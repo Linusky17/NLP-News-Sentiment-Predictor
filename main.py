@@ -15,7 +15,7 @@ nltk.download(['punkt', 'wordnet'])
 
 
 def main():
-    st.sidebar.title("NLP News Sentimental Analysis")
+    st.sidebar.title("News Sentiment Analysis on Stock Market Using Random Forest Classifier")
 
     def load_data():
         data = pd.read_csv(
@@ -45,6 +45,12 @@ def main():
         df['date'] = dataset.Date
 
         return df
+    def userInputCheck(data):
+		converted = pd.DataFrame(data, columns=['headlines'])
+        converted.replace("[^a-zA-Z]", " ", regex=True, inplace=True)
+        converted[0] = converted[0].str.lower()
+
+        return converted
 
     def tokenize(text):
         text = re.sub(r'[^\w\s]', '', text)
@@ -90,7 +96,6 @@ def main():
             st.write("Accuracy_Score: ", score.round(2))
 
     def Vectorize():
-
         pipeline = Pipeline([
             ('vect', CountVectorizer(tokenizer=tokenize, stop_words='english')),
             ('tfidf', TfidfTransformer())
@@ -102,25 +107,24 @@ def main():
     x_train, x_test, y_train, y_test = split(df)
     vector = Vectorize()
 
-    if st.sidebar.checkbox("show raw data", False):
+    if st.sidebar.checkbox("show train/test raw data", False):
         st.subheader("Top 25 Headline News from Reddit")
         st.write(df)
 
-    st.sidebar.subheader("Choose Classifier")
-    classifier = st.sidebar.selectbox(
-        "Classifier", ("Random Forest Classifier", "Logistic Regression"))
+    classifier = "Random Forest Classifier"
+    st.write(f'{x_train[0]}')
+
+    
+
 
     if classifier == "Random Forest Classifier":
-        st.sidebar.subheader("Model Hyperparameters")
+        st.sidebar.subheader("Random Forest Hyperparameters")
         n_estimators = st.sidebar.number_input(
             "n_estimators", 50, 300, step=50, key='n_estimators')
-
-        #metrics = st.sidebar.multiselect(
-        #    "what metrics to plot?", ("Confusion Matrix", "Classification_Report", "Accuracy_Score"))
-
-
+        st.sidebar.subheader("Prediction")	
+        userInputLine = st.sidebar.text_area("Enter Your News Headline for Prediction:", "Despite 1,300 dead, majority of Palestinians still back Hamas rocket attacks")
         metrics = ["Confusion Matrix", "Classification_Report", "Accuracy_Score"]
-
+        userInputLine = "b "+ userInputLine
 
 
         if st.sidebar.button("Classify", key="classify"):
@@ -132,6 +136,10 @@ def main():
                 n_estimators=n_estimators, criterion='entropy')
             model.fit(x_train, y_train)
             predictions = model.predict(x_test)
+
+
+
+
             matrix = confusion_matrix(y_test, predictions)
             score = accuracy_score(y_test, predictions)
             report = classification_report(y_test, predictions)
@@ -139,30 +147,8 @@ def main():
             # st.write("Classification_Report ", report)
             # st.write("Confusion Matrix ", matrix)
             plot_metrics(metrics)
-
-    if classifier == "Logistic Regression":
-        st.sidebar.subheader("Model Hyperparameters")
-        C = st.sidebar.number_input(
-            "C", 1, 1000, step=1, key='classify')
-
-        metrics = st.sidebar.multiselect(
-            "what metrics to plot?", ("Confusion Matrix", "Classification_Report", "Accuracy_Score"))
-        metrics = ["Confusion Matrix", "Classification_Report", "Accuracy_Score"]
-        if st.sidebar.button("Classify", key="classify"):
-
-            st.subheader("Logistic Regression")
-            x_train = vector.fit_transform(x_train)
-            x_test = vector.transform(x_test)
-            model = LogisticRegression(C=C)
-            model.fit(x_train, y_train)
-            predictions = model.predict(x_test)
-            matrix = confusion_matrix(y_test, predictions)
-            score = accuracy_score(y_test, predictions)
-            report = classification_report(y_test, predictions)
-            # st.write("Accuracy_Score: ", score.round(2))
-            # st.write("Classification_Report ", report)
-            # st.write("Confusion Matrix ", matrix)
-            plot_metrics(metrics)
+            
+            st.write(f'{predictions[0]}')
 
 
 if __name__ == '__main__':
