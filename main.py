@@ -170,7 +170,7 @@ def main():
             st.write(userInputLine)
             st.write(f'User Input Headline Prediction Result: {userPred[0]}')
             if userPred[0] == 1:
-                st.markdown("**The Dow Jones Industrial Average will stay the same or more up due to this news headline. Buy!**")
+                st.markdown("**The Dow Jones Industrial Average will stay the same or increase due to this news headline. Buy!**")
             else:
                 st.markdown("**The Dow Jones Industrial Average will decrease due to this news headline. Sell!**")
 
