@@ -1,28 +1,35 @@
-import streamlit as st 
-import numpy as np 
-
-import matplotlib.pyplot as plt
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
-
-from sklearn.decomposition import PCA
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
-
-from sklearn.metrics import accuracy_score
-
 import pandas as pd
+import streamlit as st
 from pandas_datareader import data
-aapl = data.DataReader("AAPL",
-                        start='2021-3-26',
-                        end='2021-3-27',
-                        data_source='yahoo')
+from datetime import datetime, timedelta
 
-print(aapl.head(10))
-# st.title('Streamlit Example')
-#
-# st.write("""
-# # Different classifier and datasets
-# Compare classifiers:
-# """)
+st.title("Stock Price Predictor")
+
+stock_name = "AAPL"
+stock_name = st.text_input("Enter the stock name: \n")
+option = st.slider("How many days of data would you like to see?", 1,60,30)
+						
+end = datetime.today().strftime('%Y-%m-%d')
+start = (datetime.today() - timedelta(option)).strftime('%Y-%m-%d')
+
+@st.cache
+def load_data(stock, start_date, end_date):
+    if stock == "":
+        stock = "AAPL"
+    
+    df = data.DataReader(name=stock, start=start_date, end=end_date, data_source='yahoo')
+    return df
+
+data_load_state = st.text("Loading data...")
+
+df = load_data(stock=stock_name, start_date=start, end_date=end)
+df.sort_index(axis=0, inplace=True, ascending=False)
+
+st.subheader(f'{stock_name} stock prices for the past {option} days')
+st.dataframe(df)
+
+chart_data = df[['Close']]
+st.subheader("Close Prices")
+st.line_chart(chart_data)
+
+data_load_state.text("Data loaded!")
