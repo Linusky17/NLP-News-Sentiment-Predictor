@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
+import numpy as np
 
 st.set_page_config(page_title='Stock Predictor', page_icon = 'icon.png')
 st.title("Stock Price Predictor")
@@ -18,7 +19,8 @@ start = (datetime.today() - timedelta(option)).strftime('%Y-%m-%d')
 def load_data(stock, start_date, end_date):
     if stock == "":
         stock = "AAPL"
-    
+    start_date = '2015-1-1'
+    end_date = '2019-12-31'
     df = data.DataReader(name=stock, start=start_date, end=end_date, data_source='yahoo')
     return df
 
@@ -43,15 +45,24 @@ hist = []
 target = []
 length = option
 adj_close = df['Adj Close']
+
+#st.text(f'{len}')
+
+
 for i in range(len(adj_close) - length):
    x = adj_close[i:i+length]
    y = adj_close[i+length]
    hist.append(x)
    target.append(y)
 
+#st.text(f'{target}')
 hist = np.array(hist)
 target = np.array(target)
 target = target.reshape(-1,1)
+
+
+st.text(f'{hist.shape}')
+
 
 #train/test split
 X_train = hist[:1138]
